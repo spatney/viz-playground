@@ -4,6 +4,6 @@
     },
     "files": [
         "typings/index.d.ts",
-        "app.ts"
+        "app/app.ts"
     ]
 }

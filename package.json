@@ -1,0 +1,22 @@
+{
+  "name": "viz-playground",
+  "version": "1.0.0",
+  "description": "A little playground to try your visuals in standalone mode with mock data.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spatney/viz-playground.git"
+  },
+  "author": "Sachin Patney",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/spatney/viz-playground/issues"
+  },
+  "homepage": "https://github.com/spatney/viz-playground#readme",
+  "devDependencies": {
+    "jquery": "^3.1.0"
+  }
+}
