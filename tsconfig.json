@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "target": "es5"
+    },
+    "files": [
+        "typings/index.d.ts",
+        "app.ts"
+    ]
+}
