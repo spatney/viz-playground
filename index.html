@@ -1,16 +1,19 @@
-
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Power BI visualization playground</title>
-    	<link rel="stylesheet" href="externals/jquery-ui.css">
+    <link rel="stylesheet" href="externals/jquery-ui.css">
     <link rel="stylesheet" href="app/style.css" />
-    	<script src="node_modules/jquery/dist/jquery.min.js"></script>
-	    <script src="externals/jquery-ui.js"></script>
-        <script src="app/app.js"></script>
+    <link rel="stylesheet" href="visual/dist/resources/visual.prod.css"/>
+    <link rel="stylesheet" href="visual2/dist/resources/visual.prod.css"/>
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="externals/jquery-ui.js"></script>
+    
 </head>
+
 <body>
     <header>
         <img class="left-margin" src="images/logo.png" />
@@ -46,7 +49,7 @@
                 <label>Landscape</label>
             </div>
         </div>
-        <div id="options">
+        <div id="options" hidden>
             <h4>Options:</h4>
             <div id="options-list">
                 <div id="dataViewSelection">
@@ -54,26 +57,11 @@
                     <select id="dataViewsSelect"></select>
                     <button id="randomize">Randomize</button>
                 </div>
-                <div id="capabilities">
-                    <span class="subtitle">Show:</span>
-                    <div class="input-container">
-                        <input type="checkbox" name="suppressAnimations" value="">
-                        <label>Animations</label>
-                    </div>
-                    <div hidden>
-                        <span>Animation duration:</span>
-                        <input type="text" name="animation_duration" pattern="\d+" maxlength="5" value="100">
-                    </div>
-                    <div class="input-container">
-                        <input type="checkbox" name="is_interactions" value="">
-                        <label>Interactions</label>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
     <section id="sample">
-        <div class="container">
+        <div class="container ui-widget-content">
             <div id="webContainer" class="scaled-container"></div>
         </div>
         <div class="mobile-portrait-image-container" style="display: none;">
@@ -126,8 +114,11 @@
             </div>
         </div>
     </section>
-
+    <script src="visual/dist/resources/visual.prod.js"></script>
+    <script src="visual2/dist/resources/visual.prod.js"></script>
+    <script src="app/app.js"></script>
     <script type="text/javascript">
+        powerbi.visuals.Playground.initialize();
     </script>
 </body>
 </html>

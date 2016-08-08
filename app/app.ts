@@ -36,52 +36,63 @@ enum PlaygroundViewType {
     MobileLandscapeView
 }
 
+function inherit(obj, deep = false) {
+    let base = obj;
+    if (obj && typeof obj === 'object') {
+        base = Object.create(obj);
+        if (deep) {
+            for (let key in obj) {
+                base[key] = inherit(obj[key], true);
+            }
+        }
+    }
+    return base;
+}
+
 module powerbi.visuals {
+    var mockHost = {
+        createSelectionIdBuilder: () => {
+            return {
+                withCategory: function () { return this },
+                withSeries: function () { return this },
+                withMeasure: function () { return this },
+                createSelectionId: () => {
+                    return {
+                        equals: () => false,
+                        includes: () => false,
+                        getKey: () => "fakekey",
+                        getSelector: "",
+                        getSelectorsByColumn: () => [],
+                        hasIdentity: () => false
+                    }
+                }
+            }
+        },
+        createSelectionManager: () => {
+            return {
+                select: () => {
+                    return {
+                        then: (fx) => fx([])
+                    }
+                },
+                hasSelection: () => false,
+                clear: () => {
+                    return {
+                        then: (fx) => fx([])
+                    }
+                },
+                getSelectionIds: () => []
+            }
+        },
+        colors: [{ value: 'green' }, { value: 'blue' }]
+    }
     /**
      * Demonstrates Power BI visualization elements and the way to embed them in standalone web page.
      */
     export class Playground {
-        private static disabledVisuals: string[] = [
-            "basicShape",
-            "matrix",
-            "playChart",
-            "kpi",
-            "scriptVisual",
-            "slicer",
-            "forceGraph",
-            "mekkoChart",
-            "gantt",
-            "sunburstCustom",
-            "timeline",
-            "owlGauge",
-            "debugVisual",
-            "lineDotChart",
-            "chordChart",
-            "pulseChart"
-        ];
-
-        private static mobileInteractiveVisuals: string[] = [
-            "areaChart",
-            "barChart",
-            "clusteredBarChart",
-            "clusteredColumnChart",
-            "columnChart",
-            "donutChart",
-            "hundredPercentStackedBarChart",
-            "hundredPercentStackedColumnChart",
-            "lineChart",
-            "pieChart",
-            "scatterChart",
-            "table",
-            "matrix",
-            "multiRowCard"
-        ];
-
         private static webTileRenderScale: number = 1;
         private static mobileDashboardTileRenderScale: number = 3;
         private static mobileInFocusTileRenderScale: number = 1;
-
-
 
         // The playground tabs/views
         private static webViewTab: JQuery;
@@ -104,8 +115,9 @@ module powerbi.visuals {
         private static mobileOrientationOptionsElement: JQuery;
         private static mobileOrientationPortraitRadioButton: JQuery;
         private static mobileOrientationLandscapeRadioButton: JQuery;
-        private static optionsCapabilitiesElement: JQuery;
-        private static interactionsEnabledCheckbox: JQuery;
+
+        private static plugins: {};
+        private static visuals: { container; visual }[] = [];
 
 
         /** Performs sample app initialization.*/
@@ -116,10 +128,12 @@ module powerbi.visuals {
             this.mobileOrientationOptionsElement = $('#orientation');
             this.mobileOrientationPortraitRadioButton = this.mobileOrientationOptionsElement.find("input[value='portrait']");
             this.mobileOrientationLandscapeRadioButton = this.mobileOrientationOptionsElement.find("input[value='landscape']");
-            this.optionsCapabilitiesElement = $('#capabilities');
-            this.interactionsEnabledCheckbox = $("input[name='is_interactions']");
 
             this.webContainer = $('#webContainer');
+            this.webContainer.parent().resizable();
+            this.webContainer.parent().on('resize', () => {
+                this.updateVisuals();
+            })
             this.mobilePortraitDashboardContainer = $('#mobilePortraitDashboardContainer');
             this.mobilePortraitInFocusContainer = $('#mobilePortraitInFocusContainer');
             this.mobileLandscapeDashboardContainer = $('#mobileLandscapeDashboardContainer');
@@ -129,24 +143,23 @@ module powerbi.visuals {
             this.mobilePortraitContainers = $('.mobile-portrait-image-container');
             this.mobileLandscapeContainers = $('.mobile-landscape-image-container');
 
+            this.populateVisualTypeSelect();
             this.initializeView(PlaygroundViewType.WebView);
 
-            this.populateVisualTypeSelect();
-
-
-            this.webViewTab.click(() => { this.updateView(PlaygroundViewType.WebView); });
-            this.mobileViewTab.click(() => { this.updateView(PlaygroundViewType.MobilePortraitView); });
-            this.mobileOrientationPortraitRadioButton.click(() => { this.updateView(PlaygroundViewType.MobilePortraitView); });
-            this.mobileOrientationLandscapeRadioButton.click(() => { this.updateView(PlaygroundViewType.MobileLandscapeView); });
-
-            this.interactionsEnabledCheckbox.on('change', () => this.updateVisuals);
-
+            this.webViewTab.click(() => this.updateView(PlaygroundViewType.WebView));
+            this.mobileViewTab.click(() => this.updateView(PlaygroundViewType.MobilePortraitView));
+            this.mobileOrientationPortraitRadioButton.click(() => this.updateView(PlaygroundViewType.MobilePortraitView));
+            this.mobileOrientationLandscapeRadioButton.click(() => this.updateView(PlaygroundViewType.MobileLandscapeView));
         }
 
         private static populateVisualTypeSelect(): void {
             this.visualsSelectElement.empty();
 
-            let visuals = []
+            let visuals = [];
+            let plugins = this.plugins = (<any>powerbi.visuals).plugins;
+            for (let p in plugins) {
+                visuals.push(plugins[p])
+            }
             visuals.sort(function (a, b) {
                 if (a.name < b.name) return -1;
                 if (a.name > b.name) return 1;
@@ -154,9 +167,7 @@ module powerbi.visuals {
             });
 
             visuals.forEach((visual) => {
-                if (!Playground.disabledVisuals.some((visualName: string) => visualName === visual.name)) {
-                    this.visualsSelectElement.append('<option value="' + visual.name + '">' + visual.name + '</option>');
-                }
+                this.visualsSelectElement.append('<option value="' + visual.name + '">' + visual.displayName + '</option>');
             });
 
             this.visualsSelectElement.change(() => this.onVisualTypeSelection(this.visualsSelectElement.val()));
@@ -168,29 +179,37 @@ module powerbi.visuals {
             }
 
             this.createVisualPlugin(pluginName);
-            // this.hostControls.update();
         }
 
         private static createVisualPlugin(pluginName: string): void {
+            for (let viz of this.visuals) {
+                viz.container.get(0).className = 'scaled-container'
+                viz.visual = this.plugins[pluginName].create({
+                    element: viz.container.addClass('visual-' + pluginName).get(0),
+                    host: mockHost
+                });
+            }
 
-            // create
             this.updateVisuals();
         }
 
 
         private static updateVisuals(): void {
+            for (let viz of this.visuals) {
+                viz.visual.update({ viewport: { height: viz.container.height(), width: viz.container.width() } })
+            }
         }
 
-        private static updateVisual(host: {renderingScale;container}): void {
-
-            let visualElement = Playground.getVisualElementInContainer(host.container);
-            visualElement.empty();
-
-
-            // Scale the visual back down to fit its container
-            let scale = 1 / host.renderingScale;
-            visualElement.attr('style', 'transform: scale(' + scale + '); transform-origin: top left;');
-        }
+        /*      private static updateVisual(host: { renderingScale; container }): void {
+      
+                  let visualElement = Playground.getVisualElementInContainer(host.container);
+                  visualElement.empty();
+      
+      
+                  // Scale the visual back down to fit its container
+                  let scale = 1 / host.renderingScale;
+                  visualElement.attr('style', 'transform: scale(' + scale + '); transform-origin: top left;');
+              }*/
 
         private static isMobileView(viewType: PlaygroundViewType): boolean {
             return viewType === PlaygroundViewType.MobilePortraitView || viewType === PlaygroundViewType.MobileLandscapeView;
@@ -198,50 +217,56 @@ module powerbi.visuals {
 
         private static initializeView(viewType: PlaygroundViewType): void {
 
-                // Add or remove all mobile specific options
-                if (this.isMobileView(viewType)) {
-                    this.mobileOrientationOptionsElement.show();
-                    this.optionsCapabilitiesElement.hide();
-                }
-                else {
-                    this.mobileOrientationOptionsElement.hide();
-                    this.optionsCapabilitiesElement.show();
-                }
+            // Add or remove all mobile specific options
+            if (this.isMobileView(viewType)) {
+                this.mobileOrientationOptionsElement.show();
+            }
+            else {
+                this.mobileOrientationOptionsElement.hide();
+            }
 
-                this.clearAllVisuals();
-                this.hideAllContainers();
-                this.unhighlightTabs();
-                
-                // Update the visual's containers
-                switch (viewType) {
-                    case PlaygroundViewType.WebView:
-                        this.highlightTab(this.webViewTab);
-                        this.webContainers.show();
+            this.clearAllVisuals();
+            this.hideAllContainers();
+            this.unhighlightTabs();
 
-                        break;
-                    case PlaygroundViewType.MobilePortraitView:
-                        this.highlightTab(this.mobileViewTab);
-                        this.mobilePortraitContainers.show();
 
-                        break;
-                    case PlaygroundViewType.MobileLandscapeView:
-                        this.highlightTab(this.mobileViewTab);
-                        this.mobileLandscapeContainers.show();
+            // Update the visual's containers
+            switch (viewType) {
+                case PlaygroundViewType.WebView:
+                    this.visuals.push({ visual: undefined, container: this.webContainer });
+                    this.highlightTab(this.webViewTab);
+                    this.webContainers.show();
 
-                        break;
-                    default:
-                        break;
-                }
+                    break;
+                case PlaygroundViewType.MobilePortraitView:
+                    this.visuals.push({ visual: undefined, container: this.mobilePortraitDashboardContainer });
+                    this.visuals.push({ visual: undefined, container: this.mobilePortraitInFocusContainer });
+                    this.highlightTab(this.mobileViewTab);
+                    this.mobilePortraitContainers.show();
 
-                if (this.isMobileView(viewType) && !this.isMobileView(viewType)) {
-                    // Moved to mobile view from web
-                    this.resetOrientationRadioButtons();
-                }
+                    break;
+                case PlaygroundViewType.MobileLandscapeView:
+                    this.visuals.push({ visual: undefined, container: this.mobileLandscapeDashboardContainer });
+                    this.visuals.push({ visual: undefined, container: this.mobileLandscapeInFocusContainer });
+                    this.highlightTab(this.mobileViewTab);
+                    this.mobileLandscapeContainers.show();
+
+                    break;
+                default:
+                    break;
+            }
+
+            if (this.isMobileView(viewType) && !this.isMobileView(viewType)) {
+                // Moved to mobile view from web
+                this.resetOrientationRadioButtons();
+            }
+
+            this.onVisualTypeSelection(this.visualsSelectElement.val());
 
         }
 
         private static updateView(viewType: PlaygroundViewType): void {
-
+            this.initializeView(viewType);
         }
 
         private static getVisualElementInContainer(container: JQuery): JQuery {
@@ -269,10 +294,12 @@ module powerbi.visuals {
         }
 
         private static clearAllVisuals(): void {
-        }
-
-        private static isInteractiveMode(): boolean {
-            return this.interactionsEnabledCheckbox.is(':checked');
+            this.visuals = [];
+            this.mobilePortraitDashboardContainer.empty();
+            this.mobilePortraitInFocusContainer.empty();
+            this.mobileLandscapeDashboardContainer.empty();
+            this.mobileLandscapeInFocusContainer.empty();
+            this.webContainer.empty();
         }
     }
 }
