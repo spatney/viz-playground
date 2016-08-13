@@ -15,9 +15,11 @@ export class Playground {
     constructor() {
         console.log('playground constructed');
         let arr = [];
-        for (let i = 0; i < 24; i++) {
+        for (let i = 0; i < 12; i++) {
             arr.push({
-                src: "http://visualplayground.azurewebsites.net/visuals/loader.html"
+                //src: "http://visualplayground.azurewebsites.net/visuals/loader.html"
+                src:"mockLoader/loader.html",
+                name: 'barney'
             })
         }
         this.visuals = arr;
