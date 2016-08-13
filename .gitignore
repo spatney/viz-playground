@@ -1,5 +1,4 @@
 node_modules/
 typings/
-app/app.js
-visual
-visual2
+app/**/*.js
+app/**/*.map

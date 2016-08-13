@@ -1,0 +1,9 @@
+div{
+    width: 350px;
+    height: 214px;
+    background: #fff;
+    display: inline-block;
+    margin: 4px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,.2);
+}

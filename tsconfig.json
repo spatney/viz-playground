@@ -1,9 +1,12 @@
 {
-    "compilerOptions": {
-        "target": "es5"
-    },
-    "files": [
-        "typings/index.d.ts",
-        "app/app.ts"
-    ]
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "removeComments": false,
+    "noImplicitAny": false
+  }
 }
