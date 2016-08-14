@@ -1,0 +1,65 @@
+{
+    "visual": {
+        "name": "dumb",
+        "displayName": "dumb",
+        "guid": "PBI_CV_02E0D65E_A8E3_45F4_A76C_FA9AAD992195",
+        "visualClassName": "Visual",
+        "version": "1.0.0",
+        "description": "",
+        "supportUrl": "",
+        "gitHubUrl": ""
+    },
+    "apiVersion": "1.1.0",
+    "author": {
+        "name": "",
+        "email": ""
+    },
+    "assets": {
+        "icon": "assets/icon.png"
+    },
+    "externalJS": [],
+    "style": "style/visual.less",
+    "capabilities": {
+        "dataRoles": [
+            {
+                "displayName": "Category Data",
+                "name": "category",
+                "kind": 0
+            },
+            {
+                "displayName": "Measure Data",
+                "name": "measure",
+                "kind": 1
+            }
+        ],
+        "dataViewMappings": [
+            {
+                "categorical": {
+                    "categories": {
+                        "for": {
+                            "in": "category"
+                        },
+                        "dataReductionAlgorithm": {
+                            "top": {}
+                        }
+                    },
+                    "values": {
+                        "select": [
+                            {
+                                "bind": {
+                                    "to": "measure"
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    },
+    "dataViews": "dataViews.json",
+    "content": {
+        "js": "var powerbi;!function(t){var e;!function(t){var e;!function(t){var e;!function(t){function e(t){var e={values:[]};if(!(t&&t[0]&&t[0].categorical&&t[0].categorical.categories&&t[0].categorical.categories[0].source&&t[0].categorical.values))return e;for(var i=t[0].categorical,a=i.categories[0],n=i.values[0],l=[],o=0,r=Math.max(a.values.length,n.values.length);o<r;o++){var s=n.values[o];l.push(s)}return{values:l}}var i=function(){function t(t,h,A){o=t,r=o.getContext(\"2d\"),s=h||[],u=A||{},c=o.height,f=o.width,g=u.barGap||5,v=u.barWidth||20,_=u.barPosX||5,i(),e(),n(),a(),l()}function e(){r.fillStyle=u.backgroundColor||\"rgb(30,30,30)\",r.fillRect(0,0,f,c)}function i(){v=(f-g)/s.length-g}function a(){var t=0;s.forEach(function(e){e>t&&(t=e)});for(var e=0,i=s.length;e<i;e++)s[e]<s[e-1]?r.fillStyle=\"rgba(250,100,100,.7)\":r.fillStyle=\"rgba(50,250,200,.8)\",r.fillRect(_,c,v,-(s[e]/t*(c-70))),r.fillStyle=u.fontColor||\"white\",r.font=u.fontSettings||\"bold 13px Arial\",_+=v+g}function n(){var t=c/10,e=0;r.lineWidth=2,r.strokeStyle=u.gridColor||\"rgb(50,50,50)\";for(var i=1;i<=100;i++)r.beginPath(),r.moveTo(0,e),r.lineTo(f,e),r.closePath(),r.stroke(),e+=t}function l(){r.fillStyle=\"rgb(255,255,255)\",r.font=u.titleFontSettings||\"bold 18px Arial\",r.fillText(u.title||\"Sample Data\",u.titlePosX||10,u.titlePosY||30)}var o,r,s,u,c,f,g,v,_;return{render:t}}(),a=function(){function t(t){this.target=document.createElement(\"canvas\"),t.element.appendChild(this.target)}return t.prototype.update=function(t,a){this.target.height=t.viewport.height,this.target.width=t.viewport.width,this.dataViews=t.dataViews;var n=a?a.values:e(t.dataViews).values,l={title:\" \",fontSettings:\"14px segoe ui light\",titleFontSettings:\"20px segoe ui\",titlePosY:40,titlePosX:5};i.render(this.target,n,l)},t.prototype.destroy=function(){},t}();t.Visual=a}(e=t.PBI_CV_02E0D65E_A8E3_45F4_A76C_FA9AAD992195||(t.PBI_CV_02E0D65E_A8E3_45F4_A76C_FA9AAD992195={}))}(e=t.visual||(t.visual={}))}(e=t.extensibility||(t.extensibility={}))}(powerbi||(powerbi={}));var powerbi;!function(t){var e;!function(e){var i;!function(e){e.PBI_CV_02E0D65E_A8E3_45F4_A76C_FA9AAD992195={name:\"PBI_CV_02E0D65E_A8E3_45F4_A76C_FA9AAD992195\",displayName:\"dumb\",class:\"Visual\",version:\"1.0.0\",apiVersion:\"1.1.0\",create:function(e){return new t.extensibility.visual.PBI_CV_02E0D65E_A8E3_45F4_A76C_FA9AAD992195.Visual(e)},custom:!0}}(i=e.plugins||(e.plugins={}))}(e=t.visuals||(t.visuals={}))}(powerbi||(powerbi={}));",
+        "css": ".visual-PBI_CV_02E0D65E_A8E3_45F4_A76C_FA9AAD992195 p{font-size:20px;font-weight:bold}.visual-PBI_CV_02E0D65E_A8E3_45F4_A76C_FA9AAD992195 p em{background:yellow;padding:5px}",
+        "iconBase64": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2RpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpBOEJGMzkxN0NBRDNFMDExQTcxQ0JFODI3ODBCQUE5RSIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo3NEY1QjA1NUQ0OTAxMUUwQTgxREI2NjMxMkNEMUNEMyIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo3NEY1QjA1NEQ0OTAxMUUwQTgxREI2NjMxMkNEMUNEMyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IFdpbmRvd3MiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5Mjk5RDU1ODBGRDRFMDExQTcxQ0JFODI3ODBCQUE5RSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpBOEJGMzkxN0NBRDNFMDExQTcxQ0JFODI3ODBCQUE5RSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PpDoNX0AAAI3SURBVHjarJRLSFVRFIY9t7SiRDGLoEEPCRJRaCSYkxCiFCXCF+LIMExQLkilgumgwkbdBuWDRC2EomhURCOjgagkXEgKLUKhidobM6H0+i34rxyPnuvEA5/rXPda/1l7739vJxKJxG3ls93+hEKhTILxJhgMftmsiPxdhHw4CfepeR8dCyjWwwB0kZy3iVgCoQ2ewnmXxhrBD7Cgr/ZQVA17fDRPw2UYhzK6G99IsBse6/0QNME+H8FT4EA/YiPqOgA1q4IMzBNuw6iKjkCpj+Av+AdnEEmD3bxfhzvuDk30HaEaLsEkXCO53rN+Bwg5qsvTuj/TjGYtx9nINhRmEx7AYWiFW7AXOuEcbPOUvIZ2mnrl+PkQUbNEh4QHNKUSDdsSBWEOlmxTEfvs26FL9Khe211if6Acgee+xo7xzMgBxfq9qPe3fgWBGN2lEnqtG9nExM7CV3jp3bDos2bKJB0nHFRxAxRpA/5CIXyHh5ABv6GZqd9dJ6iz2SjbxMMypGhJFtTlNzu3kK7xgDxpove8U66FK2A+s6nul5gVVMEL+Ak7lG/T+g9JcIOGar2CRUoogxMwpP/bLTJMB9bRhDbkk5bBUU0y3ES0xS04CBfN9RSHiY90vJK0BHaSzG9h2eejS3RJeVfdtrGzuGyd8CX7Yq6ExuCH63jaVMPkFOv6OibB6DKs2+VEQp+WYBoqERn2sVWWRNN0YurIfeL14U6YkpkLYCSG6e0yqdCxvKBLIm5FgAEAV0nKuwMYRUsAAAAASUVORK5CYII="
+    }
+}

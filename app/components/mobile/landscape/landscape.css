@@ -1,0 +1,20 @@
+.container{
+    background-image: url("app/components/mobile/landscape/phone-landscape.png");
+    width: 422px;
+    height: 225px;
+}
+
+.visual{
+    padding-left: 53px;
+    padding-top: 20px
+}
+
+.visual-inner{
+    display: block;
+    overflow: hidden;
+    background-color: white;
+    position: relative;
+    width: 314px;
+    height: 185px;
+    border: 0px;
+}

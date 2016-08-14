@@ -57,9 +57,11 @@ function addStyleString(str) {
 }
 
 function load() {
-    getJSON('resources/dataViews.json', function (e, d) {
+    var name = window.frameElement.getAttribute('name');
+    
+    getJSON(name+'/dataViews.json', function (e, d) {
         var dataViews = d;
-        getJSON('resources/pbiviz.json', function (e, d) {
+        getJSON(name+'/pbiviz.json', function (e, d) {
             var json = d.content ? d : JSON.parse(d);
             var content = json.content;
             var js = content.js;

@@ -1,3 +1,14 @@
-<title-bar></title-bar>
-<!--- --->
-<tile *ngFor="let tileModel of visuals"  [model]=tileModel></tile>
+<div class="playground">
+    <title-bar></title-bar>
+    <select [(ngModel)]="name"> 
+        <option *ngFor="let n of names" [attr.value]="n">{{n}}</option>
+      </select>
+    <div class="tileContainer">
+        <div *ngIf="'Regular'===name">
+            <tile *ngFor="let tileModel of visuals" [model]=tileModel></tile>
+        </div>
+        <div *ngIf="'Phone'===name">
+           <phone-all [model]=visuals[0]></phone-all>
+        </div>
+    </div>
+</div>

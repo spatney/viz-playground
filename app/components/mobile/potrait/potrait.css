@@ -1,0 +1,20 @@
+.container{
+    background-image: url("app/components/mobile/potrait/phone-portrait.png");
+    height: 422px;
+    width: 225px;
+}
+
+.visual{
+    padding-top: 53px;
+    padding-left: 20px
+}
+
+.visual-inner{
+    display: block;
+    overflow: hidden;
+    background-color: white;
+    position: relative;
+    height: 314px;
+    width: 185px;
+    border: 0px;
+}
