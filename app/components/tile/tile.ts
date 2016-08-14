@@ -1,16 +1,14 @@
 import { Component, Input } from '@angular/core';
-import {VisualTile} from '../visualTile/visualTile';
+import {VisualTile, VisualTileModel} from '../visualTile/visualTile';
 
 @Component({
     moduleId: module.id,
     selector: 'tile',
     styleUrls: ['tile.css'],
     templateUrl: 'tile.html',
-    directives:[VisualTile]
+    directives: [VisualTile]
 })
 export class Tile {
-     @Input() model;
-     constructor(){
-         
-     }
+    @Input() model: VisualTileModel;
+    constructor() { }
 }

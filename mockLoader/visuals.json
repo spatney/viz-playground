@@ -1,0 +1,17 @@
+[
+    {
+        "name": "barchart",
+        "d3": false,
+        "displayName": "Bar Chart"
+    },
+    {
+        "name": "table",
+        "d3": false,
+        "displayName": "Hello IVisual"
+    },
+    {
+        "name": "hello",
+        "d3": true,
+        "displayName": "Table"
+    }
+]

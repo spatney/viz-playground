@@ -3,18 +3,18 @@ import { SafeResourceUrl, DomSanitizationService } from '@angular/platform-brows
 
 export interface VisualTileModel {
   src: string,
-  name: string
+  name: string,
+  displayName: string
 }
 @Component({
   moduleId: module.id,
   selector: 'visual-tile',
   styleUrls: ['visualTile.css'],
-  template: '<iframe [name]=model.name [src]="getSanitizedSrc(model)" sandbox="allow-scripts allow-same-origin" frameborder="0"></iframe>'
+  templateUrl: 'visualTile.html'
 })
 export class VisualTile {
   @Input() model;
-  constructor(private sanitizer: DomSanitizationService) {
-  }
+  constructor(private sanitizer: DomSanitizationService) { }
 
   getSanitizedSrc(model: VisualTileModel) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(model.src);

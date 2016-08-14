@@ -2,45 +2,36 @@ import { Component} from '@angular/core';
 import {VisualTileModel} from '../visualTile/visualTile';
 import {Tile} from '../tile/tile';
 import {TitleBar} from '../titleBar/titleBar';
-import {InFocusVisual} from '../infocus/infocus'
-import {PhoneAll} from '../mobile/all/all'
+import {InFocusVisual} from '../infocus/infocus';
+import {PhoneAll} from '../mobile/all/all';
+import {VisualService, VisualItem} from '../../services/visual';
 
 @Component({
     moduleId: module.id,
     selector: 'playground',
     templateUrl: 'playground.html',
     styleUrls: ['playground.css'],
-    directives: [TitleBar, Tile, InFocusVisual, PhoneAll]
+    directives: [TitleBar, Tile, InFocusVisual, PhoneAll],
+    providers:[VisualService]
 })
 export class Playground {
-    visuals: VisualTileModel[];
-    names = ["Regular","Phone"];
+    visuals: VisualTileModel[] = [];
+    names = ["Regular", "Phone"];
     name = "Regular";
-    constructor() {
-        console.log('playground constructed');
-        let arr = [];
-        let names  = [{
-            name: 'barchart',
-            d3: false,
-            displayName: 'Bar Chart'
-        },{
-            name: 'table',
-            d3: false,
-            displayName: 'Hello IVisual'
-        },{
-            name: 'hello',
-            d3: true,
-            displayName: 'Table'
-        }]
+    constructor(private visualService: VisualService) {
+        visualService.getVisuals().then(d=>this.load(d))
+    }
 
-        var condition =  d=>d.d3 ===false && d.name === 'barchart';
-        names = names.filter(condition);
+    private load(visuals: VisualItem[]) {
+        let arr:(VisualItem&VisualTileModel)[] = [];
+        visuals = visuals.filter(d=>d.name==='barchart');
+        
         for (let i = 0; i < 24; i++) {
             arr.push({
                 //src: "http://visualplayground.azurewebsites.net/visuals/loader.html"
-                src:"mockLoader/loader.html",
-                name: names[i%names.length].name,
-                displayName: names[i%names.length].displayName
+                src: "mockLoader/loader.html",
+                name: visuals[i % visuals.length].name,
+                displayName: visuals[i % visuals.length].displayName
             })
         }
         this.visuals = arr;
