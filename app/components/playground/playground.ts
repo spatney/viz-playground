@@ -26,7 +26,7 @@ export class Playground {
         let arr:(VisualItem&VisualTileModel)[] = [];
         visuals = visuals.filter(d=>d.name==='barchart');
         
-        for (let i = 0; i < 24; i++) {
+        for (let i = 0; i < 100; i++) {
             arr.push({
                 //src: "http://visualplayground.azurewebsites.net/visuals/loader.html"
                 src: "mockLoader/loader.html",
